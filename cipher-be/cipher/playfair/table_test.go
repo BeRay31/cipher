@@ -12,7 +12,7 @@ func TestGenerateTable(t *testing.T) {
 	expected := "ALNGESHPUBCDFIKMOQRTVWXYZ"
 
 	if expected != string(table) {
-		t.Fatalf("Table not equal")
+		t.Fatalf("Table not equal, expected %v, found %v", expected, table)
 	}
 }
 
@@ -22,7 +22,7 @@ func TestGenerateTableNormalize(t *testing.T) {
 	expected := "ALNGESHPUBCDFIKMOQRTVWXYZ"
 
 	if expected != string(table) {
-		t.Fatalf("Table not equal")
+		t.Fatalf("Table not equal, expected %v, found %v", expected, table)
 	}
 }
 
@@ -32,7 +32,7 @@ func TestShiftHorizontal(t *testing.T) {
 	expected := "ALNGESHPUBCDFIKMOQRTVWXYZ"
 
 	if expected != string(table) {
-		t.Fatalf("Table not equal")
+		t.Fatalf("Table not equal, expected %v, found %v", expected, table)
 	}
 
 	row, col := 0, 4

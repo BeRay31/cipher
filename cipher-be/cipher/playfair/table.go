@@ -29,24 +29,25 @@ func GenerateTable(key string) Table {
 	result := []rune{}
 	for _, c := range key {
 		if c != 'J' && !exists[c] {
+			exists[c] = true
 			result = append(result, c)
 		}
-
-		// put rest not in playfair array
-		keys := make([]rune, 0, len(exists))
-		for k := range exists {
-			keys = append(keys, k)
-		}
-		sort.Slice(keys, func(i, j int) bool {
-			return keys[i] < keys[j]
-		})
-		for _, k := range keys {
-			if !exists[k] {
-				result = append(result, k)
-			}
-		}
-
 	}
+
+	// put rest not in playfair array
+	keys := make([]rune, 0, len(exists))
+	for k := range exists {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i] < keys[j]
+	})
+	for _, k := range keys {
+		if !exists[k] {
+			result = append(result, k)
+		}
+	}
+
 	return Table(result)
 }
 
