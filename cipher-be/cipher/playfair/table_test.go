@@ -37,7 +37,7 @@ func TestShiftHorizontal(t *testing.T) {
 
 	row, col := 0, 4
 	expectedRow, expectedCol := 1, 0
-	newRow, newCol := table.ShiftHorizontal(row, col)
+	newRow, newCol := table.ShiftHorizontal(row, col, 1)
 	if newRow != expectedRow || newCol != expectedCol {
 		t.Fatalf("Horizontal shift fails")
 	}

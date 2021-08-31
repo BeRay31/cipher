@@ -3,20 +3,16 @@ package playfair
 import (
 	"errors"
 	"sort"
-	"strings"
 	"unicode"
+
+	"github.com/mkamadeus/cipher/common/stringutils"
 )
 
 type Table string
 
 func GenerateTable(key string) Table {
 	// normalize key
-	key = strings.ToUpper(key)
-	key = strings.ReplaceAll(key, " ", "")
-	key = strings.ReplaceAll(key, ",", "")
-	key = strings.ReplaceAll(key, ".", "")
-	key = strings.ReplaceAll(key, ":", "")
-	key = strings.ReplaceAll(key, ";", "")
+	key = stringutils.Normalize(key)
 
 	// prepare map
 	exists := map[rune]bool{}
@@ -87,18 +83,18 @@ func (table Table) IsSameColumn(i, j rune) (bool, error) {
 	return pos1/5 == pos2/5, nil
 }
 
-func (table Table) ShiftHorizontal(i, j int) (int, int) {
+func (table Table) ShiftHorizontal(i, j, offset int) (int, int) {
 	ri, ci := i/5, i%5
 	rj, cj := j/5, j%5
 
-	return ri*5 + (ci+1)%5, rj*5 + (cj+1)%5
+	return ri*5 + (ci+offset)%5, rj*5 + (cj+offset)%5
 }
 
-func (table Table) ShiftVertical(i, j int) (int, int) {
+func (table Table) ShiftVertical(i, j, offset int) (int, int) {
 	ri, ci := i/5, i%5
 	rj, cj := j/5, j%5
 
-	return ((ri+1)%5)*5 + ci, ((rj+1)%5)*5 + cj
+	return ((ri+offset)%5)*5 + ci, ((rj+offset)%5)*5 + cj
 }
 
 func (table Table) ShiftCycle(i, j int) (int, int) {

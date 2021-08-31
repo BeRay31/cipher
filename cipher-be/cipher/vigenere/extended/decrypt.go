@@ -1,15 +1,10 @@
-package standard
+package extended
 
-import "strings"
-
-func Decrypt(cipher string, key string) string {
-	cipher = strings.ToUpper(cipher)
-	key = strings.ToUpper(key)
-
-	result := []rune{}
+func Decrypt(cipher []byte, key []byte) []byte {
+	result := []byte{}
 	for i, char := range cipher {
-		result = append(result, rune((((int(char)-65)-(int(key[i%len(key)])-65)+26)%26)+65))
+		result = append(result, byte((int(char-key[i%len(key)])+256)%256))
 	}
 
-	return string(result)
+	return result
 }

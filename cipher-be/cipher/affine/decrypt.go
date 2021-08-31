@@ -1,6 +1,10 @@
 package affine
 
+import "github.com/mkamadeus/cipher/common/stringutils"
+
 func Decrypt(cipher string, m, b int) string {
+	cipher = stringutils.Normalize(cipher)
+
 	var x int
 	for x = 0; (m*x)%26 != 1; x++ {
 		if x == 26 {

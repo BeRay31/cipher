@@ -1,11 +1,9 @@
 package affine
 
-import (
-	"strings"
-)
+import "github.com/mkamadeus/cipher/common/stringutils"
 
 func Encrypt(plain string, m, b int) string {
-	normalized := strings.ToUpper(plain)
+	normalized := stringutils.Normalize(plain)
 	result := []rune{}
 	for _, char := range normalized {
 		ascii := int(char) - 65

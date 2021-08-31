@@ -8,11 +8,11 @@ import (
 
 func TestDecrypt(t *testing.T) {
 	cipher := "LVVQHZNGFHRVL"
-	key := "SONY"
+	key := "sony"
 	expected := "THISPLAINTEXT"
 
-	decrypted := standard.Decrypt(cipher, key)
-	if decrypted != expected {
-		t.Fatalf("affine encryption failed, expected %v, found %v", expected, decrypted)
+	encrypted := standard.Decrypt(cipher, key)
+	if encrypted != expected {
+		t.Fatalf("standard vignere decryption failed, expected %v, found %v", expected, encrypted)
 	}
 }

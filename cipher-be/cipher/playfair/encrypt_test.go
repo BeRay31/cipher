@@ -7,7 +7,7 @@ import (
 )
 
 func TestEncrypt(t *testing.T) {
-	plain := "temuiibunantimalam"
+	plain := "TEMUIIBUNANTIMALAM"
 	key := "JALANGANESHASEPULUH"
 	cipher, err := playfair.Encrypt(plain, key)
 	expected := "ZBRSFYKUPGLGRKVSNLQV"

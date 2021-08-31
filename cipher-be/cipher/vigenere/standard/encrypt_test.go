@@ -13,6 +13,6 @@ func TestEncrypt(t *testing.T) {
 
 	encrypted := standard.Encrypt(plain, key)
 	if encrypted != expected {
-		t.Fatalf("affine encryption failed, expected %v, found %v", expected, encrypted)
+		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, encrypted)
 	}
 }

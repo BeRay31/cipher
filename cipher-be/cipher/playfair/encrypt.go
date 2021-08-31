@@ -1,12 +1,12 @@
 package playfair
 
 import (
-	"strings"
+	"github.com/mkamadeus/cipher/common/stringutils"
 )
 
 func Encrypt(plain, key string) (string, error) {
-	plain = strings.ToUpper(plain)
-	plain = strings.ReplaceAll(plain, "J", "I")
+	plain = stringutils.Normalize(plain)
+
 	table := GenerateTable(key)
 
 	result := []rune{}
@@ -42,10 +42,10 @@ func Encrypt(plain, key string) (string, error) {
 		var newPos1, newPos2 int
 		if pos1/5 == pos2/5 {
 			// same row
-			newPos1, newPos2 = table.ShiftHorizontal(pos1, pos2)
+			newPos1, newPos2 = table.ShiftHorizontal(pos1, pos2, 1)
 		} else if pos1%5 == pos2%5 {
 			// same col
-			newPos1, newPos2 = table.ShiftVertical(pos1, pos2)
+			newPos1, newPos2 = table.ShiftVertical(pos1, pos2, 1)
 		} else {
 			// different row & col
 			newPos1, newPos2 = table.ShiftCycle(pos1, pos2)
