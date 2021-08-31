@@ -1,12 +1,21 @@
 package standard
 
-import "github.com/mkamadeus/cipher/common/stringutils"
+import (
+	"strings"
+
+	"github.com/mkamadeus/cipher/common/stringutils"
+)
 
 func Encrypt(plain string, key string) string {
+	trimmedPlainLen := len(strings.ReplaceAll(plain, " ", ""))
+	var keyUsed string = key
+	if len(key) > trimmedPlainLen {
+		keyUsed = string(key[:trimmedPlainLen])
+	}
 	result := []rune{}
 	i := 0
 	for _, char := range plain {
-		keyEvaluated := key[i%len(key)]
+		keyEvaluated := keyUsed[i%len(keyUsed)]
 		keyBase := stringutils.GetCharBase(rune(keyEvaluated))
 		charBase := stringutils.GetCharBase(char)
 		var toBeAppended rune
