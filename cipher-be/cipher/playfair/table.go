@@ -1,16 +1,15 @@
 package playfair
 
 import (
-	"log"
+	"errors"
 	"sort"
 	"strings"
+	"unicode"
 )
 
-type Table struct {
-	Table [5][5]rune
-}
+type Table string
 
-func GenerateTable(key string) *Table {
+func GenerateTable(key string) Table {
 	// normalize key
 	key = strings.ToUpper(key)
 	key = strings.ReplaceAll(key, " ", "")
@@ -19,71 +18,91 @@ func GenerateTable(key string) *Table {
 	key = strings.ReplaceAll(key, ":", "")
 	key = strings.ReplaceAll(key, ";", "")
 
-	log.Println(key)
-
 	// prepare map
 	exists := map[rune]bool{}
 	for c := 'A'; c <= 'Z'; c++ {
 		exists[c] = false
 	}
 	delete(exists, 'J')
-	cell := 0
 
 	// put words from key
-	var result [5][5]rune
+	result := []rune{}
 	for _, c := range key {
 		if c != 'J' && !exists[c] {
-			exists[c] = true
-			result[cell/5][cell%5] = c
-			cell++
+			result = append(result, c)
 		}
-	}
 
-	// put rest not in playfair array
-	keys := make([]rune, 0, len(exists))
-	for k := range exists {
-		keys = append(keys, k)
-	}
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i] < keys[j]
-	})
-	for _, k := range keys {
-		if !exists[k] {
-			exists[k] = true
-			result[cell/5][cell%5] = k
-			cell++
+		// put rest not in playfair array
+		keys := make([]rune, 0, len(exists))
+		for k := range exists {
+			keys = append(keys, k)
 		}
-	}
-
-	return &Table{
-		Table: result,
-	}
-}
-
-func (t Table) IsSameRow(a, b rune) bool {
-	for _, row := range t.Table {
-		for i := 0; i < len(row); i++ {
-			for j := i + 1; j < len(row); j++ {
-				if row[i] == row[j] {
-					return true
-				}
+		sort.Slice(keys, func(i, j int) bool {
+			return keys[i] < keys[j]
+		})
+		for _, k := range keys {
+			if !exists[k] {
+				result = append(result, k)
 			}
 		}
-	}
 
-	return false
+	}
+	return Table(result)
 }
 
-func (t Table) IsSameColumn(a, b rune) bool {
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
-			for k := j + 1; k < 5; k++ {
-				if t.Table[j][i] == t.Table[j][i] {
-					return true
-				}
-			}
+func (table Table) Find(c rune) (int, error) {
+	c = unicode.ToUpper(c)
+	for i, ch := range table {
+		if ch == c {
+			return i, nil
 		}
 	}
+	return -1, errors.New("character not found")
+}
 
-	return false
+func (table Table) IsSameRow(i, j rune) (bool, error) {
+	pos1, err := table.Find(i)
+	if err != nil {
+		return false, err
+	}
+	pos2, err := table.Find(j)
+	if err != nil {
+		return false, err
+	}
+
+	return pos1/5 == pos2/5, nil
+}
+
+func (table Table) IsSameColumn(i, j rune) (bool, error) {
+	pos1, err := table.Find(i)
+	if err != nil {
+		return false, err
+	}
+	pos2, err := table.Find(j)
+	if err != nil {
+		return false, err
+	}
+
+	return pos1/5 == pos2/5, nil
+}
+
+func (table Table) ShiftHorizontal(i, j int) (int, int) {
+	ri, ci := i/5, i%5
+	rj, cj := j/5, j%5
+
+	return ri*5 + (ci+1)%5, rj*5 + (cj+1)%5
+}
+
+func (table Table) ShiftVertical(i, j int) (int, int) {
+	ri, ci := i/5, i%5
+	rj, cj := j/5, j%5
+
+	return ((ri+1)%5)*5 + ci, ((rj+1)%5)*5 + cj
+}
+
+func (table Table) ShiftCycle(i, j int) (int, int) {
+	ri, ci := i/5, i%5
+	rj, cj := j/5, j%5
+
+	return ri*5 + cj, rj*5 + ci
 }
