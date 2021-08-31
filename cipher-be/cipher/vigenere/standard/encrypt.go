@@ -1,14 +1,35 @@
 package standard
 
-import "strings"
+func getCharBase(char rune) int {
+	intRep := int(char)
+	if intRep >= 65 && intRep <= 90 { // Uppercase
+		return 65
+	} else if intRep >= 97 && intRep <= 122 {
+		return 97
+	} else {
+		return -1
+	}
+}
 
 func Encrypt(plain string, key string) string {
-	plain = strings.ToUpper(plain)
-	key = strings.ToUpper(key)
-
 	result := []rune{}
-	for i, char := range plain {
-		result = append(result, rune((((int(char)-65)+(int(key[i%len(key)])-65))%26)+65))
+	i := 0
+	for _, char := range plain {
+		keyEvaluated := key[i%len(key)]
+		keyBase := getCharBase(rune(keyEvaluated))
+		charBase := getCharBase(char)
+		var toBeAppended rune
+		// Ignore non alphabet
+		if charBase == -1 {
+			toBeAppended = char
+		} else {
+			toBeAppended = rune((((int(char) - charBase) + (int(keyEvaluated) - keyBase)) % 26) + charBase)
+		}
+		result = append(result, toBeAppended)
+
+		if char != ' ' {
+			i++
+		}
 	}
 
 	return string(result)
