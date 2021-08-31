@@ -9,8 +9,8 @@ import (
 
 func TestDecrypt(t *testing.T) {
 	cipher := []byte{255, 1, 3, 5, 251, 253, 255, 0}
-	key := []byte{255, 0, 1, 2}
-	expected := []byte{0, 1, 2, 3, 252, 253, 254, 255}
+	key := []byte{255, 2, 1, 2}
+	expected := []byte{0, 254, 2, 3, 252, 253, 254, 255}
 
 	decrypted := extended.Decrypt(cipher, key)
 	if bytes.Equal(expected, decrypted) {
