@@ -20,7 +20,7 @@ func TestDecrypt(t *testing.T) {
 func TestDecryptWithUpperCase(t *testing.T) {
 	cipher := "nGmni Tskcxipo esdskkxgmejvc!#!#!#!#"
 	key := "KEY"
-	expected := "dCode Vigenere automatically!#!#!#!#"
+	expected := "dCodeVigenereautomatically"
 
 	encrypted := standard.Decrypt(cipher, key)
 	if encrypted != expected {

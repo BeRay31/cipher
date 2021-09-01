@@ -20,7 +20,29 @@ func TestEncrypt(t *testing.T) {
 func TestEncryptWithUpperCase(t *testing.T) {
 	plain := "dCode Vigenere automatically!#!#!#!#"
 	key := "KEY"
-	expected := "nGmni Tskcxipo esdskkxgmejvc!#!#!#!#"
+	expected := "nGmniTskcxipoesdskkxgmejvc"
+
+	encrypted := standard.Encrypt(plain, key)
+	if encrypted != expected {
+		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, encrypted)
+	}
+}
+
+func TestEncryptIgnoreSymbol(t *testing.T) {
+	plain := "dCode Vigenere !#!#!#!# automatically"
+	key := "KEY"
+	expected := "nGmniTskcxipoesdskkxgmejvc"
+
+	encrypted := standard.Encrypt(plain, key)
+	if encrypted != expected {
+		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, encrypted)
+	}
+}
+
+func TestEncryptIgnoreKeyWhitespace(t *testing.T) {
+	plain := "dCode Vigenere !#!#!#!# automatically"
+	key := "K   E   Y     "
+	expected := "nGmniTskcxipoesdskkxgmejvc"
 
 	encrypted := standard.Encrypt(plain, key)
 	if encrypted != expected {
