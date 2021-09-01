@@ -16,6 +16,18 @@ func TestGenerateTable(t *testing.T) {
 	}
 }
 
+func TestGenerateTableUnique(t *testing.T) {
+	key := "PISANG"
+	table := playfair.GenerateTable(key)
+	expected := "PISANGBCDEFHKLMOQRTUVWXYZ"
+
+	t.Log(table)
+
+	if expected != string(table) {
+		t.Fatalf("Table not equal, expected %v, found %v", expected, table)
+	}
+}
+
 func TestGenerateTableNormalize(t *testing.T) {
 	key := "J ALAN GAN.E,SHA SEPU LUH"
 	table := playfair.GenerateTable(key)
