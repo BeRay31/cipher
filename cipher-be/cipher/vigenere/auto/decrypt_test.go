@@ -13,7 +13,7 @@ func TestDecrypt(t *testing.T) {
 
 	decrypted := auto.Decrypt(cipher, key)
 	if decrypted != expected {
-		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, decrypted)
+		t.Fatalf("auto-key vignere encryption failed, expected %v, found %v", expected, decrypted)
 	}
 }
 
@@ -24,6 +24,6 @@ func TestDecryptWithUpperCase(t *testing.T) {
 
 	decrypted := auto.Decrypt(cipher, key)
 	if decrypted != expected {
-		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, decrypted)
+		t.Fatalf("auto-ke vignere encryption failed, expected %v, found %v", expected, decrypted)
 	}
 }

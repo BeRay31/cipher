@@ -14,10 +14,11 @@ func Encrypt(plain string, key string) string {
 		keyEvaluated := key[i%len(key)]
 		keyBase := stringutils.GetCharBase(rune(keyEvaluated))
 		charBase := stringutils.GetCharBase(char)
-		var toBeAppended rune
+		y := int(keyEvaluated) - keyBase
+		x := int(char) - charBase
 		// Ignore non alphabet and ignore space
 		if charBase != -1 {
-			toBeAppended = rune((((int(char) - charBase) + (int(keyEvaluated) - keyBase)) % 26) + charBase)
+			toBeAppended := rune(((x + y) % 26) + charBase)
 			result = append(result, toBeAppended)
 			i++
 		}
