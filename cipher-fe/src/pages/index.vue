@@ -1,49 +1,56 @@
 <script setup lang="ts">
-const name = ref('')
-
-const router = useRouter()
-const go = () => {
-  if (name.value)
-    router.push(`/hi/${encodeURIComponent(name.value)}`)
-}
+const plain = ref('')
+const mode = ref('')
 </script>
 
 <template>
   <div>
-    <p class="text-4xl">
-      <carbon-campsite class="inline-block" />
-    </p>
-    <p>
-      <a rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
-        Vitesse Lite
-      </a>
-    </p>
-    <p>
-      <em class="text-sm opacity-75">Opinionated Vite Starter Template</em>
-    </p>
+    <div class="flex justify-center items-center space-x-2 text-4xl mb-4">
+      <heroicons-solid:key class="inline-block text-3xl" />
+      <div>cipher</div>
+    </div>
 
-    <div class="py-4" />
+    <div>
+      <select>
+        <option value="affine">
+          Affine
+        </option>
+        <option value="playfair">
+          Playfair
+        </option>
+        <option value="vigenere-standard">
+          Vigenere Standard
+        </option>
+        <option value="Affine">
+          sa
+        </option>
+      </select>
+    </div>
 
-    <input
-      id="input"
-      v-model="name"
-      placeholder="What's your name?"
-      type="text"
-      autocomplete="false"
-      p="x-4 y-2"
-      w="250px"
-      text="center"
-      bg="transparent"
-      border="~ rounded gray-200 dark:gray-700"
-      outline="none active:none"
-      @keydown.enter="go"
-    >
+    <div>
+      <label class="text-sm opacity-75 italic" for="plaintext">Plaintext</label>
+    </div>
+    <div>
+      <textarea
+        id="plaintext"
+        v-model="plain"
+        placeholder="Enter here..."
+        type="text"
+        autocomplete="false"
+        p="x-2 y-2"
+        w="250px"
+        bg="transparent"
+        text="center sm"
+        border="~ rounded gray-200 dark:gray-700"
+        outline="none active:none"
+      />
+    </div>
+    <div class="flex flex-col">
+    </div>
 
     <div>
       <button
-        class="m-3 text-sm btn"
-        :disabled="!name"
-        @click="go"
+        class="w-32 m-3 text-sm btn"
       >
         Go
       </button>
