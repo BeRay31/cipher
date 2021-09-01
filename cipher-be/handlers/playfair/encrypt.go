@@ -5,16 +5,31 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/playfair"
+	"github.com/mkamadeus/cipher/models"
 )
 
 func Encrypt(c echo.Context) error {
-	plain := c.QueryParam("plain")
-	key := c.QueryParam("key")
+	body := new(models.PlayfairRequest)
+	err := c.Bind(body)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 
-	encrypted, err := playfair.Encrypt(plain, key)
+	content, err := body.Input.ParseContent()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, encrypted)
+	encrypted, err := playfair.Encrypt(content, body.Key)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	payload := &models.PlayfairResponse{
+		BaseResponse: models.BaseResponse{
+			Content: encrypted,
+		},
+		Key: body.Key,
+	}
+	return c.JSON(http.StatusOK, payload)
 }

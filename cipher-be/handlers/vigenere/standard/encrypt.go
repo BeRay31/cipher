@@ -5,13 +5,27 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/vigenere/standard"
+	"github.com/mkamadeus/cipher/models"
 )
 
 func Encrypt(c echo.Context) error {
-	plain := c.QueryParam("plain")
-	key := c.QueryParam("key")
+	body := new(models.VigenereRequest)
+	err := c.Bind(body)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 
-	encrypted := standard.Encrypt(plain, key)
+	content, err := body.Input.ParseContent()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
-	return c.JSON(http.StatusOK, encrypted)
+	encrypted := standard.Encrypt(content, body.Key)
+	payload := &models.VigenereResponse{
+		BaseResponse: models.BaseResponse{
+			Content: encrypted,
+		},
+		Key: body.Key,
+	}
+	return c.JSON(http.StatusOK, payload)
 }

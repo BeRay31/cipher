@@ -2,27 +2,34 @@ package affine
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/affine"
+	"github.com/mkamadeus/cipher/models"
 )
 
 func Encrypt(c echo.Context) error {
-	plain := c.QueryParam("plain")
-	m, err := strconv.Atoi(c.QueryParam("m"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
-	}
-	b, err := strconv.Atoi(c.QueryParam("b"))
+	body := new(models.AffineRequest)
+	err := c.Bind(body)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	encrypted, err := affine.Encrypt(plain, m, b)
+	content, err := body.Input.ParseContent()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, encrypted)
+	encrypted, err := affine.Encrypt(content, body.Key, body.Offset)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	payload := &models.AffineResponse{
+		BaseResponse: models.BaseResponse{
+			Content: encrypted,
+		},
+		Key:    body.Key,
+		Offset: body.Offset,
+	}
+	return c.JSON(http.StatusOK, payload)
 }

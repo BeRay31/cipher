@@ -5,13 +5,27 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/vigenere/standard"
+	"github.com/mkamadeus/cipher/models"
 )
 
 func Decrypt(c echo.Context) error {
-	cipher := c.QueryParam("cipher")
-	key := c.QueryParam("key")
+	body := new(models.VigenereRequest)
+	err := c.Bind(body)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 
-	decrypted := standard.Decrypt(cipher, key)
+	content, err := body.Input.ParseContent()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
-	return c.JSON(http.StatusOK, decrypted)
+	decrypted := standard.Decrypt(content, body.Key)
+	payload := &models.VigenereResponse{
+		BaseResponse: models.BaseResponse{
+			Content: decrypted,
+		},
+		Key: body.Key,
+	}
+	return c.JSON(http.StatusOK, payload)
 }

@@ -5,16 +5,31 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/playfair"
+	"github.com/mkamadeus/cipher/models"
 )
 
 func Decrypt(c echo.Context) error {
-	cipher := c.QueryParam("cipher")
-	key := c.QueryParam("key")
+	body := new(models.PlayfairRequest)
+	err := c.Bind(body)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 
-	decrypted, err := playfair.Decrypt(cipher, key)
+	content, err := body.Input.ParseContent()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, decrypted)
+	decrypted, err := playfair.Decrypt(content, body.Key)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	payload := &models.PlayfairResponse{
+		BaseResponse: models.BaseResponse{
+			Content: decrypted,
+		},
+		Key: body.Key,
+	}
+	return c.JSON(http.StatusOK, payload)
 }
