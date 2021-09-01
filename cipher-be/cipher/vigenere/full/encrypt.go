@@ -7,7 +7,7 @@ import (
 )
 
 func Encrypt(plain string, key string) string {
-	fullVigenereTable := LoadTable()
+	fullVigenereTable := FullVigenereTable
 
 	trimmedPlainLen := len(strings.ReplaceAll(plain, " ", ""))
 	key = strings.ReplaceAll(key, " ", "")

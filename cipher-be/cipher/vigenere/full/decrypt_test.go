@@ -6,24 +6,35 @@ import (
 	"github.com/mkamadeus/cipher/cipher/vigenere/full"
 )
 
-func TestDecrypt(t *testing.T) {
-	cipher := "lvvqhzngfhrvl"
+func TestDecryptt(t *testing.T) {
+	cipher := "DPYFNWKHRDCABKO"
 	key := "sony"
-	expected := "thisplaintext"
+	expected := "THISISPLAINTEXT"
 
-	encrypted := full.Decrypt(cipher, key)
-	if encrypted != expected {
-		t.Fatalf("full vignere decryption failed, expected %v, found %v", expected, encrypted)
+	decrypted := full.Decrypt(cipher, key)
+	if decrypted != expected {
+		t.Fatalf("full vignere Decryption failed, expected %v, found %v", expected, decrypted)
 	}
 }
 
-func TestDecryptWithUpperCase(t *testing.T) {
-	cipher := "nGmni Tskcxipo esdskkxgmejvc!#!#!#!#"
-	key := "KEY"
-	expected := "dCode Vigenere automatically!#!#!#!#"
+func TestDecrypt2(t *testing.T) {
+	cipher := "DPY"
+	key := "sony"
+	expected := "THI"
 
-	encrypted := full.Decrypt(cipher, key)
-	if encrypted != expected {
-		t.Fatalf("full vignere encryption failed, expected %v, found %v", expected, encrypted)
+	decrypted := full.Decrypt(cipher, key)
+	if decrypted != expected {
+		t.Fatalf("full vignere decryption failed, expected %v, found %v", expected, decrypted)
+	}
+}
+
+func TestDecryptionWithUpperCase(t *testing.T) {
+	cipher := "YMKYAMPVWNAZVNXIPTHUQCNHET"
+	key := "KEY"
+	expected := "DCODEVIGENEREAUTOMATICALLY"
+
+	decrypted := full.Decrypt(cipher, key)
+	if decrypted != expected {
+		t.Fatalf("full vignere decryption failed, expected %v, found %v", expected, decrypted)
 	}
 }

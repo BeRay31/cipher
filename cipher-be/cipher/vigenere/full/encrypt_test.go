@@ -7,23 +7,34 @@ import (
 )
 
 func TestEncrypt(t *testing.T) {
-	plain := "thisplaintext"
+	plain := "thisisplaintext"
 	key := "sony"
-	expected := "lvvqhzngfhrvl"
+	expected := "DPYFNWKHRDCABKO"
 
 	encrypted := full.Encrypt(plain, key)
 	if encrypted != expected {
-		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, encrypted)
+		t.Fatalf("full vignere encryption failed, expected %v, found %v", expected, encrypted)
+	}
+}
+
+func TestEncrypt2(t *testing.T) {
+	plain := "thi"
+	key := "sony"
+	expected := "DPY"
+
+	encrypted := full.Encrypt(plain, key)
+	if encrypted != expected {
+		t.Fatalf("full vignere encryption failed, expected %v, found %v", expected, encrypted)
 	}
 }
 
 func TestEncryptWithUpperCase(t *testing.T) {
 	plain := "dCode Vigenere automatically!#!#!#!#"
 	key := "KEY"
-	expected := "nGmni Tskcxipo esdskkxgmejvc!#!#!#!#"
+	expected := "YMKYAMPVWNAZVNXIPTHUQCNHET"
 
 	encrypted := full.Encrypt(plain, key)
 	if encrypted != expected {
-		t.Fatalf("standard vignere encryption failed, expected %v, found %v", expected, encrypted)
+		t.Fatalf("full vignere encryption failed, expected %v, found %v", expected, encrypted)
 	}
 }
