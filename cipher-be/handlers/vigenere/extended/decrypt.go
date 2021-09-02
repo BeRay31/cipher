@@ -1,6 +1,7 @@
 package extended
 
 import (
+	"encoding/base64"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -9,21 +10,24 @@ import (
 )
 
 func Decrypt(c echo.Context) error {
-	body := new(models.VigenereRequest)
+	body := new(models.VigenereExtendedRequest)
 	err := c.Bind(body)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	content, err := body.Input.ParseContent()
+	content, err := base64.URLEncoding.DecodeString(body.Content)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	decrypted := extended.Decrypt([]byte(content), []byte(body.Key))
+	decrypted := extended.Decrypt(content, []byte(body.Key))
+	decryptedBase64 := base64.URLEncoding.EncodeToString(decrypted)
 
 	payload := &models.VigenereExtendedResponse{
-		Content: decrypted,
-		Key:     body.Key,
+		BaseResponse: models.BaseResponse{
+			Content: decryptedBase64,
+		},
+		Key: body.Key,
 	}
 	return c.JSON(http.StatusOK, payload)
 }

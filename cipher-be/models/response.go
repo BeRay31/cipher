@@ -21,6 +21,6 @@ type VigenereResponse struct {
 }
 
 type VigenereExtendedResponse struct {
-	Content []byte `json:"content"`
-	Key     string `json:"key"`
+	BaseResponse
+	Key string `json:"key"`
 }
