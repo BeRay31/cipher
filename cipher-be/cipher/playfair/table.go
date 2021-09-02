@@ -87,14 +87,14 @@ func (table Table) ShiftHorizontal(i, j, offset int) (int, int) {
 	ri, ci := i/5, i%5
 	rj, cj := j/5, j%5
 
-	return ri*5 + (ci+offset)%5, rj*5 + (cj+offset)%5
+	return ri*5 + (ci+offset+5)%5, rj*5 + (cj+offset+5)%5
 }
 
 func (table Table) ShiftVertical(i, j, offset int) (int, int) {
 	ri, ci := i/5, i%5
 	rj, cj := j/5, j%5
 
-	return ((ri+offset)%5)*5 + ci, ((rj+offset)%5)*5 + cj
+	return ((ri+offset+5)%5)*5 + ci, ((rj+offset+5)%5)*5 + cj
 }
 
 func (table Table) ShiftCycle(i, j int) (int, int) {
