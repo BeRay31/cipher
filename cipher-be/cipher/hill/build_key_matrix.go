@@ -88,8 +88,25 @@ func MatToFloatArr(mat [][]int) []float64 {
 	floatArray := make([]float64, len(mat)*len(mat[0]))
 	for i := 0; i < len(mat); i++ {
 		for j := 0; j < len(mat[i]); j++ {
-			floatArray[i*len(mat)+j] = float64(mat[i][j])
+			floatArray[i*len(mat[i])+j] = float64(mat[i][j])
 		}
 	}
 	return floatArray
+}
+
+func ModInverse(a int, b int) int {
+	for i := 1; i < b; i++ {
+		if CorrectModulus(((CorrectModulus(a, b))*(CorrectModulus(i, b))), b) == 1 {
+			return i
+		}
+	}
+	panic("CANNOT FIND MODULE")
+}
+
+func CorrectModulus(d, m int) int {
+	var res int = d % m
+	if (res < 0 && m > 0) || (res > 0 && m < 0) {
+		return res + m
+	}
+	return res
 }
