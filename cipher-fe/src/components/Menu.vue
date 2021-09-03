@@ -9,17 +9,17 @@
         @click="emit('modeClicked', mode)"
         class="
           hover:cursor-pointer
-          p-2 border-2px
+          p-2
+          border-2px
           border-teal-200
           rounded-xl
           hover:bg-teal-100
-          :hover:bg-black
           font-semibold
           font-sans
           select-none"
         :class="[
           mode === props.activeMode ?
-            'bg-teal-600 text-light-600 hover:text-black' : ''
+            'bg-teal-500 text-light-600 hover:bg-teal-500 hover:cursor-default' : ''
         ]">{{ mode }}</div>
     </div>
     <!-- TYPE CONTAINER -->
@@ -39,10 +39,10 @@
           font-sans
           select-none
           mt-2"
-          :class="[
-            cipherType === props.activeType ?
-              'bg-teal-600 text-light-600 hover:text-black' : ''
-          ]">{{ cipherType }}</div>
+        :class="[
+          cipherType === props.activeType ?
+            'bg-teal-500 text-light-600 hover:bg-teal-500 hover:cursor-default' : ''
+        ]">{{ cipherType }}</div>
     </div>
   </div>
 </template>
