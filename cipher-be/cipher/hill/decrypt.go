@@ -55,13 +55,13 @@ func Decrypt(cipher string, key string) string {
 
 	var resMatrix mat.Dense
 	resMatrix.Mul(&finalKeyDense, denseTransposedSegment)
-	resMatrix.T()
+	transposedRes := resMatrix.T()
 
-	r, c := resMatrix.Dims()
+	r, c := transposedRes.Dims()
 	runeResMatrix := make([]rune, r*c)
 	for i := 0; i < r; i++ {
 		for j := 0; j < c; j++ {
-			runeResMatrix[i*c+j] = rune(CorrectModulus(int(resMatrix.At(i, j)), 26)) + 65
+			runeResMatrix[i*c+j] = rune(CorrectModulus(int(transposedRes.At(i, j)), 26)) + 65
 		}
 	}
 
