@@ -83,3 +83,13 @@ func BuildSegmentedPlainArr(segmentedPlain []string, offset int) [][]int {
 	}
 	return segmentedMatrix
 }
+
+func MatToFloatArr(mat [][]int) []float64 {
+	floatArray := make([]float64, len(mat)*len(mat[0]))
+	for i := 0; i < len(mat); i++ {
+		for j := 0; j < len(mat[i]); j++ {
+			floatArray[i*len(mat)+j] = float64(mat[i][j])
+		}
+	}
+	return floatArray
+}
