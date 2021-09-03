@@ -13,7 +13,7 @@ func check(e error) {
 }
 
 func LoadTable() [26][26]rune {
-	dataPath, _ := filepath.Abs("full_vigenere_table.txt")
+	dataPath, _ := filepath.Abs("cipher/vigenere/full/full_vigenere_table.txt")
 	data, err := os.ReadFile(dataPath)
 	check(err)
 

@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "err": {
+      "name": "pnpm",
+      "message": "No package.json (or package.yaml, or package.json5) was found in \"D:\\College Assignment\\Cryptography\\cipher\".",
+      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+      "stack": "pnpm: No package.json (or package.yaml, or package.json5) was found in \"D:\\College Assignment\\Cryptography\\cipher\".\n    at readProjectManifest (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:40329:13)\n    at async Object.readProjectManifestOnly (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:40333:28)\n    at async Object.readProjectManifestOnly (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:40552:24)\n    at async Object.handler (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:129129:24)\n    at async C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:133231:20\n    at async run (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:133206:34)\n    at async runPnpm (C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:133416:5)\n    at async C:\\Users\\LENOVO\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:133408:7"
+    }
+  }
+}

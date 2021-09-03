@@ -1,59 +1,28 @@
-<script setup lang="ts">
-const plain = ref('')
-const mode = ref('')
-</script>
-
 <template>
-  <div>
-    <div class="flex justify-center items-center space-x-2 text-4xl mb-4">
-      <heroicons-solid:key class="inline-block text-3xl" />
-      <div>cipher</div>
-    </div>
-
-    <div>
-      <select>
-        <option value="affine">
-          Affine
-        </option>
-        <option value="playfair">
-          Playfair
-        </option>
-        <option value="vigenere-standard">
-          Vigenere Standard
-        </option>
-        <option value="Affine">
-          sa
-        </option>
-      </select>
-    </div>
-
-    <div>
-      <label class="text-sm opacity-75 italic" for="plaintext">Plaintext</label>
-    </div>
-    <div>
-      <textarea
-        id="plaintext"
-        v-model="plain"
-        placeholder="Enter here..."
-        type="text"
-        autocomplete="false"
-        p="x-2 y-2"
-        w="250px"
-        bg="transparent"
-        text="center sm"
-        border="~ rounded gray-200 dark:gray-700"
-        outline="none active:none"
-      />
-    </div>
-    <div class="flex flex-col">
-    </div>
-
-    <div>
-      <button
-        class="w-32 m-3 text-sm btn"
-      >
-        Go
-      </button>
+  <div class="text-center flex flex-row justify-between border-teal-200 border-2px w-[100%]">
+    <Menu :active-mode="menuState.activeMode" :active-type="menuState.activeType" @mode-clicked="handleModeChange" @type-clicked="handleTypeChange"></Menu>
+    <div class="flex flex-grow bg-teal-100 ml-4">
+      <div>LADSD</div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { MODE, TYPE } from '~/components/constant'
+import Menu from '~/components/Menu.vue'
+// TYPE
+type MenuType = {
+  activeMode: string,
+  activeType: string
+}
+
+const menuState: MenuType = reactive({
+  activeMode: MODE.ENCRYPT,
+  activeType: TYPE.STANDARD_VIGENERE
+})
+
+const handleTypeChange = (type: string) => { menuState.activeType = type }
+const handleModeChange = (mode: string) => { menuState.activeMode = mode }
+</script>
+
+
