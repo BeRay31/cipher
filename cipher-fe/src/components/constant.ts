@@ -17,3 +17,8 @@ export enum RESULT_STRING_TYPE {
   NO_SPACE = "NO SPACE",
   GROUPED_5_LETTERS = "GROUPED 5 LETTERS"
 }
+
+export enum INPUT {
+  TEXT = "TEXT",
+  KEY = "KEY"
+}
