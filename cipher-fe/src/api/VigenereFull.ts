@@ -1,9 +1,9 @@
 import service from "./service";
 
-export default class VigenereFull {
+export default class VigenereFull{
   static baseURL = `vigenere/full`
 
-  static async Decrypt(cipher: string, key: string) {
+  static async decrypt(cipher: string, key: string) {
     const req = {
       input: {
         type: "TEXT",
@@ -15,7 +15,7 @@ export default class VigenereFull {
     return resp;
   }
 
-  static async Encrypt(plain: string, key: string) {
+  static async encrypt(plain: string, key: string) {
     const req = {
       input: {
         type: "TEXT",
