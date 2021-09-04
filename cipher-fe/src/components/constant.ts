@@ -18,7 +18,8 @@ export enum RESULT_STRING_TYPE {
   GROUPED_5_LETTERS = "GROUPED 5 LETTERS"
 }
 
-export enum INPUT {
-  TEXT = "TEXT",
-  KEY = "KEY"
+export enum RESULT {
+  NO_SPACE = "NO SPACE",
+  GROUPED = "GROUPED",
+  FILE = "FILE"
 }

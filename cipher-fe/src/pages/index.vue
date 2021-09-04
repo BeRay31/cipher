@@ -31,44 +31,28 @@
             </div>
           </div>
           <!-- INPUT-CONTAINER -->
-          <div class="flex flex-col justify-center items-center">
-            <input
-              type="text"
-              v-model="text"
-              :placeholder="plainPlaceholder"
-              class="px-2 py-2 rounded min-w-[35rem] font-spartan font-normal focus:outline-none">
-
-              <p class="text-alternate font-spartan text-xl my-10">or</p>
-              <!-- INPUT-FILE-CONTAINER -->
-              <div
-                class="flex flex-row text-secondary border-current border-[2px] rounded-md py-2 px-4 gap-x-2 select-none cursor-pointer hover:bg-current min-w-52 justify-center items-center"
-                @click="(e) => handleClickInputFile(e, INPUT.TEXT)"
-              >
-                <img src="../assets/foundation_upload-cloud.svg">
-                <p class="text-primary font-spartan font-normal text-base">{{ filePlaceholder }}</p>
-              </div>
-              <input id="hiddenInputFile1" type="file" class="hidden" @change="() => handleInputFile(1)">
-          </div>
+          <InputField
+            :content="text"
+            :file-input="textFileRef"
+            :text-placeholder="plainPlaceholder"
+            :file-placeholder="filePlaceholder"
+            :accept-all="menuState.activeType === TYPE.EXTENDED_VIGENERE"
+            @update="(e) => {text = e}"
+            @file-changed="(e) => {textFileRef = e}"
+            @remove-file="() => {textFileRef = null}"
+          />
           <div class="my-4"></div>
-          <div class="flex flex-col justify-center items-center">
-            <input
-              type="text"
-              v-model="key"
-              placeholder="Input key here"
-              class="px-2 py-2 rounded min-w-[35rem] font-spartan font-normal focus:outline-none">
-
-              <p class="text-alternate font-spartan text-xl my-10">or</p>
-              <!-- INPUT-FILE-CONTAINER -->
-              <div
-                class="flex flex-row text-secondary border-current border-[2px] rounded-md py-2 px-4 gap-x-2 select-none cursor-pointer hover:bg-current min-w-52 justify-center items-center"
-                @click="(e) => handleClickInputFile(e, INPUT.KEY)"
-              >
-                <img src="../assets/foundation_upload-cloud.svg">
-                <p class="text-primary font-spartan font-normal text-base">{{ filePlaceholder }}</p>
-              </div>
-              <input id="hiddenInputFile2" type="file" class="hidden" @change="() => handleInputFile(2)">
-          </div>
-          <div class="flex flex-row text-secondary border-current border-[2px] rounded-md py-2 px-4 gap-x-2 select-none cursor-pointer min-w-52 justify-center items-center mt-10 hover:bg-current">
+          <InputField 
+            :content="key"
+            :file-input="keyFileRef"
+            :text-placeholder="`Input key here`"
+            :file-placeholder="filePlaceholder"
+            :accept-all="menuState.activeType === TYPE.EXTENDED_VIGENERE"
+            @update="(e) => {key = e}"
+            @file-changed="(e) => {keyFileRef = e}"
+            @remove-file="() => {keyFileRef = null}"
+          />
+          <div class="flex flex-row text-secondary border-current border-[2px] rounded-md py-2 px-4 gap-x-2 select-none cursor-pointer w-[90%] justify-center items-center mt-10 hover:bg-current">
             <p class="text-primary font-spartan font-semibold text-base">{{ capitalize(menuState.activeMode) }}</p>
           </div>
         </div>
@@ -89,7 +73,7 @@
             >
               <div class="flex flex-row justify-center items-center gap-x-8 mb-4">
                 <p class="font-poppins font-semibold text-xl text-primary">{{ capitalize(resultLabel) }}</p>
-                <div class="text-secondary border-[2px] border-current select-none cursor-pointer hover:bg-current rounded-md px-3 py-2">
+                <div @click="() => handleDownload(resultLabel == resultTypes.NO_SPACE ? outputTypes.NO_SPACE : outputTypes.GROUPED)" class="text-secondary border-[2px] border-current select-none cursor-pointer hover:bg-current rounded-md px-3 py-2">
                   <p class="font-spartan text-primary text-sm">Download</p>
                 </div>
               </div>
@@ -103,7 +87,7 @@
           <div class="flex flex-col justify-center items-center gap-6">
             <p class="font-poppins font-semibold text-xl text-primary">File</p>
             <img class="w-16 h-16" src="../assets/file.svg">
-            <div class="text-secondary border-[2px] border-current select-none cursor-pointer hover:bg-current rounded-md px-3 py-2">
+            <div @click="() => handleDownload(outputTypes.FILE)" class="text-secondary border-[2px] border-current select-none cursor-pointer hover:bg-current rounded-md px-3 py-2">
               <p class="font-spartan text-primary text-sm">Download</p>
             </div>
           </div>
@@ -117,7 +101,8 @@
 
 <script setup lang="ts">
 import { ComputedRef, Ref } from '@vue/reactivity'
-import { MODE, TYPE, RESULT_STRING_TYPE, INPUT } from '~/components/constant'
+import { MODE, TYPE, RESULT_STRING_TYPE, RESULT } from '~/components/constant'
+import InputField from '~/components/InputField.vue'
 // TYPE
 type MenuType = {
   activeMode: string,
@@ -137,22 +122,34 @@ const menuState: MenuType = reactive({
 const types = TYPE
 const menus = MODE
 const resultTypes = RESULT_STRING_TYPE
+const outputTypes = RESULT
 
-const text: Ref<string|null> = ref(null)
-const key: Ref<string|null> = ref(null)
-let fileRef: Ref<string|any> = ref(null)
-let fileKeyRef: Ref<string|any> = ref(null)
+const text: Ref<string> = ref('')
+const key: Ref<string> = ref('')
+let textFileRef: Ref<string|any> = ref(null)
+let keyFileRef: Ref<string|any> = ref(null)
 let result: Ref<Result|null> = ref(null)
 
 /// Handlers
 const handleTypeChange: Function = (type: string): void => { menuState.activeType = type }
 const handleModeChange: Function = (mode: string): void => { menuState.activeMode = mode }
-const handleInputFile: Function = (e: any, type: INPUT): void => {
-  fileRef.value = e.target.files[0]
+const handleDownload: Function = (type: RESULT): void => {
+  switch (type) {
+    case RESULT.NO_SPACE:
+      console.log("🚀 ~ file: index.vue ~ line 144 ~ RESULT.NO_SPACE", RESULT.NO_SPACE)
+      break;
+    case RESULT.GROUPED:
+      console.log("🚀 ~ file: index.vue ~ line 144 ~ RESULT.GROUPED", RESULT.GROUPED)
+      break;
+    case RESULT.FILE:
+      console.log("🚀 ~ file: index.vue ~ line 144 ~ RESULT.FILE", RESULT.FILE)
+      break;
+  
+    default:
+      break;
+  }
 }
-const handleClickInputFile: Function = (id: [1, 2]): void => {
-  document.getElementById('hiddenInputFile'+id)?.click()
-}
+
 // Computed
 const title: ComputedRef<string> = computed(() => `${menuState.activeType} ${menuState.activeMode === MODE.ENCRYPT ? 'ENCRYPTION' : 'DECRYPTION'}`)
 const plainPlaceholder: ComputedRef<string> = computed(() => `Input ${menuState.activeMode === MODE.ENCRYPT ? 'plain' : 'cipher'} text here`)
