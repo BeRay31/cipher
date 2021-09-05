@@ -52,18 +52,36 @@ const downloadFile = (text: string, name: string) => {
   element.click()
   element.remove()
 }
+const dataURItoBlob = (dataURI: string) => {
+  const buffer = Buffer.from(dataURI, 'base64')
+  const ab = Uint8Array.from(buffer).buffer
+  // write the ArrayBuffer to a blob, and you're done
+  const blob = new Blob([ab])
+  return blob
+}
+
+const toBinary = (string: string) => {
+  const codeUnits = new Uint16Array(string.length)
+  for (let i = 0; i < codeUnits.length; i++)
+    codeUnits[i] = string.charCodeAt(i)
+
+  return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)))
+}
+
+const fromBinary = (encoded: string) => {
+  const binary = atob(encoded)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < bytes.length; i++)
+    bytes[i] = binary.charCodeAt(i)
+
+  return String.fromCharCode(...new Uint16Array(bytes.buffer))
+}
+
 const handleDownload = (): void => {
   if (mainStore.mode !== 'vigenereext') { downloadFile(mainStore.resultString, new Date().getTime().toString()) }
-
   else {
     console.log(mainStore.resultString)
-    const binary_string = window.atob(mainStore.resultString)
-    const len = binary_string.length
-    const bytes = new Uint8Array(len)
-    for (let i = 0; i < len; i++)
-      bytes[i] = binary_string.charCodeAt(i)
-
-    const blob = new Blob([bytes], { type: 'application/pdf' })
+    const blob = dataURItoBlob(mainStore.resultString)
     const link = document.createElement('a')
     const fileName = new Date().getTime().toString()
     link.href = window.URL.createObjectURL(blob)

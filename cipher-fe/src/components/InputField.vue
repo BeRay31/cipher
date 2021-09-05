@@ -92,19 +92,11 @@ const handleFileChange = (e: any) => {
   else {
     const reader = new FileReader()
     reader.addEventListener('load', () => {
-      const buffer = reader.result as ArrayBuffer
-
-      let binary = ''
-      const bytes = new Uint8Array(buffer)
-      const len = bytes.byteLength
-      for (let i = 0; i < len; i++)
-        binary += String.fromCharCode(bytes[i])
-
-      // window.btoa(binary)
+      const result = reader.result as string
       fileText.value = '<file read>'
-      emit('fileChanged', window.btoa(String.fromCharCode(...bytes)))
+      emit('fileChanged', result)
     })
-    reader.readAsArrayBuffer(e.target.files[0])
+    reader.readAsDataURL(e.target.files[0])
   }
 }
 </script>

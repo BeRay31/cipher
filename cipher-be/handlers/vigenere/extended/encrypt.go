@@ -15,11 +15,8 @@ func Encrypt(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	content, err := base64.URLEncoding.DecodeString(body.Content)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
-	encrypted := extended.Encrypt(content, []byte(body.Key))
+
+	encrypted := extended.Encrypt([]byte(body.Content), []byte(body.Key))
 	encryptedBase64 := base64.URLEncoding.EncodeToString(encrypted)
 	payload := &models.VigenereExtendedResponse{
 		BaseResponse: models.BaseResponse{

@@ -21,11 +21,11 @@ func Decrypt(c echo.Context) error {
 	}
 
 	decrypted := extended.Decrypt(content, []byte(body.Key))
-	decryptedBase64 := base64.URLEncoding.EncodeToString(decrypted)
+	// decryptedBase64 := base64.URLEncoding.EncodeToString(decrypted)
 
 	payload := &models.VigenereExtendedResponse{
 		BaseResponse: models.BaseResponse{
-			Content: decryptedBase64,
+			Content: string(decrypted),
 		},
 		Key: body.Key,
 	}
