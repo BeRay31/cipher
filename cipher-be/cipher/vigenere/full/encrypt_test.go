@@ -18,8 +18,8 @@ func TestEncrypt(t *testing.T) {
 }
 
 func TestEncrypt2(t *testing.T) {
-	plain := "thi"
-	key := "sony"
+	plain := "t hi(*&"
+	key := "so(*&^ny"
 	expected := "DPY"
 
 	encrypted := full.Encrypt(plain, key)

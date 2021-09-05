@@ -20,7 +20,10 @@ func Decrypt(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	decrypted := hill.Decrypt(content, body.Key)
+	decrypted, err := hill.Decrypt(content, body.Key)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
 	payload := &models.HillResponse{
 		BaseResponse: models.BaseResponse{

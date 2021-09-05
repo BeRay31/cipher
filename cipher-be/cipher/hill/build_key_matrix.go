@@ -67,7 +67,7 @@ func BuildPlainString(plain string, dim int) ([]string, int) {
 	return strArr, offset
 }
 
-func BuildSegmentedPlainArr(segmentedPlain []string, offset int) [][]int {
+func BuildSegmentedPlainMat(segmentedPlain []string, offset int) [][]int {
 	segmentedMatrix := make([][]int, len(segmentedPlain))
 	dim := len(segmentedPlain[0])
 	for i, segmented := range segmentedPlain {

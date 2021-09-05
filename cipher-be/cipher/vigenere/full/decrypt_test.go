@@ -19,7 +19,7 @@ func TestDecryptt(t *testing.T) {
 
 func TestDecrypt2(t *testing.T) {
 	cipher := "DPY"
-	key := "sony"
+	key := "son y"
 	expected := "THI"
 
 	decrypted := full.Decrypt(cipher, key)
@@ -29,7 +29,7 @@ func TestDecrypt2(t *testing.T) {
 }
 
 func TestDecryptionWithUpperCase(t *testing.T) {
-	cipher := "YMKYAMPVWNAZVNXIPTHUQCNHET"
+	cipher := "YMKYAMPVWNAZVNXIPTHUQCNHET()*&^%$"
 	key := "KEY"
 	expected := "DCODEVIGENEREAUTOMATICALLY"
 

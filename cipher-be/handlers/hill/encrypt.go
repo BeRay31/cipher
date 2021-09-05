@@ -20,7 +20,10 @@ func Encrypt(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	encrypted := hill.Encrypt(content, body.Key)
+	encrypted, err := hill.Encrypt(content, body.Key)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
 	payload := &models.HillResponse{
 		BaseResponse: models.BaseResponse{
