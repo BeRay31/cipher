@@ -24,3 +24,8 @@ type VigenereExtendedResponse struct {
 	BaseResponse
 	Key string `json:"key"`
 }
+
+type HillResponse struct {
+	BaseResponse
+	Key string `json:"key"`
+}

@@ -2,6 +2,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from 'virtual:generated-pages'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 
 // windicss layers
@@ -11,9 +12,14 @@ import './styles/main.css'
 import 'virtual:windi-utilities.css'
 
 const app = createApp(App)
-const router = createRouter({
+
+// vue-router
+app.use(createRouter({
   history: createWebHistory(),
   routes,
-})
-app.use(router)
+}))
+
+// pinia
+app.use(createPinia())
+
 app.mount('#app')
