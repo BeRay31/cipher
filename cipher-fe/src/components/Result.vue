@@ -28,9 +28,7 @@
       </div>
     </div>
     <!-- TEXT RESULT -->
-    <pre class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
-    <template v-if="mainStore.mode !== 'vigenereext'">
-    </template>
+    <pre v-if="mainStore.mode !== 'vigenereext'" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
   </div>
 </template>
 
@@ -55,7 +53,24 @@ const downloadFile = (text: string, name: string) => {
   element.remove()
 }
 const handleDownload = (): void => {
-  downloadFile(mainStore.resultString, new Date().getTime().toString())
+  if (mainStore.mode !== 'vigenereext') { downloadFile(mainStore.resultString, new Date().getTime().toString()) }
+
+  else {
+    console.log(mainStore.resultString)
+    const binary_string = window.atob(mainStore.resultString)
+    const len = binary_string.length
+    const bytes = new Uint8Array(len)
+    for (let i = 0; i < len; i++)
+      bytes[i] = binary_string.charCodeAt(i)
+
+    const blob = new Blob([bytes], { type: 'application/pdf' })
+    const link = document.createElement('a')
+    const fileName = new Date().getTime().toString()
+    link.href = window.URL.createObjectURL(blob)
+    link.download = fileName
+    link.click()
+    // downloadFile(bytes.buffer, new Date().getTime().toString())
+  }
 }
 
 // UTILS

@@ -1,21 +1,20 @@
 <template>
-  <div class="flex flex-col justify-center items-center p-12">
-    <!-- INPUT-CONTAINER -->
-    <div class="mt-4 w-[100%] flex flex-col justify-center items-center">
-      <!-- CONTENT-CONTAINER -->
-      <div class="flex flex-row justify-evenly items-center w-full mb-8">
-        <!-- MENU-CONTAINER -->
-        <!-- MODE-CONTAINER -->
+  <div class="container mx-auto sm:(p-2 w-full) md:(p-6 w-2/3) lg:(p-8 w-1/2)">
+    <div class="flex flex-row justify-evenly items-center w-full mb-8">
+      <div class="w-1/3">
         <cipher-selection />
-        <!-- INPUT-CONTENT-CONTAINER -->
+      </div>
+      <div class="w-2/3">
         <mode-selection />
       </div>
-      <div class="w-full">
-        <result />
-      </div>
+    </div>
+    <div v-if="mainStore.resultString !== ''" class="w-full">
+      <result />
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">import { useMainStore } from '~/store'
+
+const mainStore = useMainStore()
 </script>

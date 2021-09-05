@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const vigenereEncryptRequest = async(plain: string, key: string, isFile: boolean): Promise<{content: string; key: string}> => {
+export const vigenereEncryptRequest = async(plain: string, key: string, isFile: boolean, style?: string): Promise<{content: string; key: string}> => {
   const requestBody = {
     input: {
       type: isFile ? 'FILE' : 'TEXT',
@@ -8,13 +8,13 @@ export const vigenereEncryptRequest = async(plain: string, key: string, isFile: 
     },
     key: key.toUpperCase(),
   }
-  const response = await axios.post('http://localhost:1337/vigenere/standard/encrypt', requestBody)
+  const response = await axios.post(`http://localhost:1337/vigenere/${style || 'standard'}/encrypt`, requestBody)
   const result = response.data
 
   return result
 }
 
-export const vigenereDecryptRequest = async(plain: string, key: string, isFile: boolean): Promise<{content: string; key: string}> => {
+export const vigenereDecryptRequest = async(plain: string, key: string, isFile: boolean, style: string): Promise<{content: string; key: string}> => {
   const requestBody = {
     input: {
       type: isFile ? 'FILE' : 'TEXT',
@@ -22,7 +22,29 @@ export const vigenereDecryptRequest = async(plain: string, key: string, isFile: 
     },
     key: key.toUpperCase(),
   }
-  const response = await axios.post('http://localhost:1337/vigenere/standard/decrypt', requestBody)
+  const response = await axios.post(`http://localhost:1337/vigenere/${style || 'standard'}/encrypt`, requestBody)
+  const result = response.data
+
+  return result
+}
+
+export const vigenereExtendedEncryptRequest = async(plain: string, key: string): Promise<{content: string; key: string}> => {
+  const requestBody = {
+    content: plain,
+    key: key.toUpperCase(),
+  }
+  const response = await axios.post('http://localhost:1337/vigenere/extended/encrypt', requestBody)
+  const result = response.data
+
+  return result
+}
+
+export const vigenereExtendedDecryptRequest = async(plain: string, key: string): Promise<{content: string; key: string}> => {
+  const requestBody = {
+    content: plain,
+    key: key.toUpperCase(),
+  }
+  const response = await axios.post('http://localhost:1337/vigenere/extended/decrypt', requestBody)
   const result = response.data
 
   return result

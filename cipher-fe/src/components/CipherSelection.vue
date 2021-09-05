@@ -3,15 +3,15 @@
     <div
       v-for="(cipherType, i) in cipherTypes"
       :key="cipherType"
-      class=" text-lg select-none cursor-pointer"
-      :class="[store.modeIndex === i ? 'text-primary font-semibold cursor-default text-indigo-400' : 'text-alternate opacity-25']"
+      class=" text-lg select-none cursor-pointer transition-all duration-300"
+      :class="[store.modeIndex === i ? 'font-semibold cursor-default text-indigo-400 text-lg' : 'opacity-25 text-sm']"
       @click="() => {
         store.modeIndex = i
         store.mode = cipherTypes[i]
       }"
     >
       <div class="relative inline-flex items-center">
-        <carbon-hashtag v-if="store.modeIndex === i" class="-left-8 absolute" />
+        <carbon-hashtag v-if="store.modeIndex === i" class="-left-6 absolute" />
         {{ cipherType }}
       </div>
     </div>

@@ -20,7 +20,7 @@
       <InputField
         :content="mainStore.inputString"
         :placeholder="mainStore.isEncrypt ? 'Plaintext...' :'Ciphertext...'"
-        :accept-all="mainStore.mode === 'vignereext'"
+        :accept-all="mainStore.mode === 'vigenereext'"
         @update="handleInputUpdate"
         @file-changed="handleInputFileChange"
         @remove-file="handleInputFileRemove"
@@ -28,7 +28,7 @@
       <InputField
         :content="mainStore.keyString"
         placeholder="Key..."
-        :accept-all="mainStore.mode === 'vignereext'"
+        :accept-all="false"
         @update="handleKeyUpdate"
         @file-changed="handleKeyFileChange"
         @remove-file="handleKeyFileRemove"
@@ -45,9 +45,10 @@
 
 <script setup lang="ts">
 import { useMainStore } from '~/store'
-import { vigenereDecryptRequest, vigenereEncryptRequest } from '~/api/vigenere'
+import { vigenereDecryptRequest, vigenereEncryptRequest, vigenereExtendedDecryptRequest, vigenereExtendedEncryptRequest } from '~/api/vigenere'
 import { affineDecryptRequest, affineEncryptRequest } from '~/api/affine'
 import { playfairDecryptRequest, playfairEncryptRequest } from '~/api/playfair'
+import { hillDecryptRequest, hillEncryptRequest } from '~/api/hill'
 
 const mainStore = useMainStore()
 
@@ -83,11 +84,27 @@ const handleButton = async() => {
   // check mode
   if (mainStore.isEncrypt) {
     if (mode === 'vigenerestd') {
-      const result = await vigenereEncryptRequest(input, key, false)
+      const result = await vigenereEncryptRequest(input, key, false, 'standard')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenerefull') {
+      const result = await vigenereEncryptRequest(input, key, false, 'full')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenereauto') {
+      const result = await vigenereEncryptRequest(input, key, false, 'auto')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenereext') {
+      const result = await vigenereExtendedEncryptRequest(input, key)
       mainStore.resultString = result.content
     }
     if (mode === 'playfair') {
       const result = await playfairEncryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+    if (mode === 'hill') {
+      const result = await hillEncryptRequest(input, key, false)
       mainStore.resultString = result.content
     }
     if (mode === 'affine') {
@@ -98,11 +115,27 @@ const handleButton = async() => {
   }
   else {
     if (mode === 'vigenerestd') {
-      const result = await vigenereDecryptRequest(input, key, false)
+      const result = await vigenereDecryptRequest(input, key, false, 'standard')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenerefull') {
+      const result = await vigenereDecryptRequest(input, key, false, 'full')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenereauto') {
+      const result = await vigenereDecryptRequest(input, key, false, 'auto')
+      mainStore.resultString = result.content
+    }
+    if (mode === 'vigenereext') {
+      const result = await vigenereExtendedDecryptRequest(input, key)
       mainStore.resultString = result.content
     }
     if (mode === 'playfair') {
       const result = await playfairDecryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+    if (mode === 'hill') {
+      const result = await hillDecryptRequest(input, key, false)
       mainStore.resultString = result.content
     }
     if (mode === 'affine') {

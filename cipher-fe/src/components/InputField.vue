@@ -2,13 +2,14 @@
   <template v-if="!fileText" class="flex justify-center items-center space-x-4">
     <div class="flex justify-center items-center space-x-4">
       <input
+        v-if="!acceptAll"
         type="text"
         :value="inputText"
         :placeholder="placeholder"
-        class="px-2 py-2 rounded min-w-[35rem] bg-gray-600 text-gray-100  font-normal focus:outline-none"
+        class="px-2 py-2 rounded w-full bg-gray-600 text-gray-100  font-normal focus:outline-none"
         @change="changeValue"
       >
-      <div>
+      <div v-if="!acceptAll">
         or
       </div>
       <button
@@ -78,12 +79,32 @@ const handleClickInputFile = () => {
 }
 
 const handleFileChange = (e: any) => {
-  const reader = new FileReader()
-  reader.addEventListener('load', (event) => {
-    const text = reader.result as string
-    fileText.value = text
-    emit('fileChanged', text)
-  })
-  reader.readAsText(e.target.files[0])
+  // if not vigenere extended
+  if (!props.acceptAll) {
+    const reader = new FileReader()
+    reader.addEventListener('load', (event) => {
+      const text = reader.result as string
+      fileText.value = text
+      emit('fileChanged', text)
+    })
+    reader.readAsText(e.target.files[0])
+  }
+  else {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => {
+      const buffer = reader.result as ArrayBuffer
+
+      let binary = ''
+      const bytes = new Uint8Array(buffer)
+      const len = bytes.byteLength
+      for (let i = 0; i < len; i++)
+        binary += String.fromCharCode(bytes[i])
+
+      // window.btoa(binary)
+      fileText.value = '<file read>'
+      emit('fileChanged', window.btoa(String.fromCharCode(...bytes)))
+    })
+    reader.readAsArrayBuffer(e.target.files[0])
+  }
 }
 </script>
