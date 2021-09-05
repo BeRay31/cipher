@@ -34,6 +34,9 @@
         @remove-file="handleKeyFileRemove"
       />
     </div>
+    <div v-if="mainStore.mode === 'affine'" class="opacity-20 mb-2">
+      Note: For affine ecnryption, key should be in format of m,b (key, offset)
+    </div>
     <button class="btn w-full py-2" @click="handleButton">
       {{ mainStore.isEncrypt ? 'Encrypt' :'Decrypt' }}
     </button>
@@ -43,6 +46,8 @@
 <script setup lang="ts">
 import { useMainStore } from '~/store'
 import { vigenereDecryptRequest, vigenereEncryptRequest } from '~/api/vigenere'
+import { affineDecryptRequest, affineEncryptRequest } from '~/api/affine'
+import { playfairDecryptRequest, playfairEncryptRequest } from '~/api/playfair'
 
 const mainStore = useMainStore()
 
@@ -81,10 +86,28 @@ const handleButton = async() => {
       const result = await vigenereEncryptRequest(input, key, false)
       mainStore.resultString = result.content
     }
+    if (mode === 'playfair') {
+      const result = await playfairEncryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+    if (mode === 'affine') {
+      const [m, b] = key.split(',')
+      const result = await affineEncryptRequest(input, parseInt(m), parseInt(b), false)
+      mainStore.resultString = result.content
+    }
   }
   else {
     if (mode === 'vigenerestd') {
       const result = await vigenereDecryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+    if (mode === 'playfair') {
+      const result = await playfairDecryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+    if (mode === 'affine') {
+      const [m, b] = key.split(',')
+      const result = await affineDecryptRequest(input, parseInt(m), parseInt(b), false)
       mainStore.resultString = result.content
     }
   }
