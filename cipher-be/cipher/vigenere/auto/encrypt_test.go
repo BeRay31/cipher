@@ -9,7 +9,7 @@ import (
 func TestEncrypt(t *testing.T) {
 	plain := "negarapenghasilminyak"
 	key := "INDO"
-	expected := "vrjoeeveegwefosmavjms"
+	expected := "VRJOEEVEEGWEFOSMAVJMS"
 
 	encrypted := auto.Encrypt(plain, key)
 	if encrypted != expected {
@@ -20,7 +20,7 @@ func TestEncrypt(t *testing.T) {
 func TestEncryptWithUpperCase(t *testing.T) {
 	plain := "dCode Vigenere automatically!#!#!#!#"
 	key := "KEY"
-	expected := "nGmggJlkzvkvrelxogthucttny"
+	expected := "NGMGGJLKZVKVRELXOGTHUCTTNY"
 
 	encrypted := auto.Encrypt(plain, key)
 	if encrypted != expected {
@@ -31,7 +31,7 @@ func TestEncryptWithUpperCase(t *testing.T) {
 func TestEncryptIgnoreSymbol(t *testing.T) {
 	plain := "dCode Vigenere !#!#!#!# automatically"
 	key := "KEY"
-	expected := "nGmggJlkzvkvrelxogthucttny"
+	expected := "NGMGGJLKZVKVRELXOGTHUCTTNY"
 
 	encrypted := auto.Encrypt(plain, key)
 	if encrypted != expected {

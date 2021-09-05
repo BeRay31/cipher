@@ -1,18 +1,21 @@
 package hill
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"math"
 
 	"github.com/mkamadeus/cipher/common/stringutils"
 	"gonum.org/v1/gonum/mat"
 )
 
-func Decrypt(cipher string, key string) string {
+func Decrypt(cipher string, key string) (string, error) {
 	cipher = stringutils.Normalize(cipher)
 	key = stringutils.Normalize(key)
 
+	if !isQuadratic(len(key)) {
+		return "", errors.New("key length isn't quadratic")
+	}
 	//Key Matrix
 	keyMatrix := BuildKeyMatrix(key)
 	keyDim := len(keyMatrix[0])
@@ -23,11 +26,14 @@ func Decrypt(cipher string, key string) string {
 	detKeyRounded := int(math.Round(detKeyDense))
 	fmt.Println(detKeyRounded)
 	inversDetMod := ModInverse(detKeyRounded, 26)
+	if inversDetMod == -1 {
+		return "", errors.New("mod 26 key determinant not found")
+	}
 	// Invers
 	var keyInv mat.Dense
 	err := keyInv.Inverse(keyDenseMatrix)
 	if err != nil {
-		log.Fatalf("A is not invertible: %v", err)
+		return "", errors.New("Key isn't invertible")
 	}
 	// I * D so it will fit with the formula
 	var normalizedKeyInv mat.Dense
@@ -49,7 +55,7 @@ func Decrypt(cipher string, key string) string {
 	var finalKeyDense mat.Dense
 	finalKeyDense.Scale(float64(inversDetMod), normalizedKeyInversDense)
 
-	segmentedWord := BuildSegmentedPlainArr(BuildPlainString(cipher, keyDim))
+	segmentedWord := BuildSegmentedPlainMat(BuildPlainString(cipher, keyDim))
 	transposedSegment := transpose(segmentedWord)
 	denseTransposedSegment := mat.NewDense(len(transposedSegment), len(transposedSegment[0]), MatToFloatArr(transposedSegment))
 
@@ -65,5 +71,5 @@ func Decrypt(cipher string, key string) string {
 		}
 	}
 
-	return string(runeResMatrix)
+	return string(runeResMatrix), nil
 }
