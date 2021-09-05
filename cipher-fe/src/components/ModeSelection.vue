@@ -1,0 +1,93 @@
+<template>
+  <div class="bg-gray-700 rounded-2xl flex flex-col p-6">
+    <div class="inline-flex space-x-2 text-gray-400 mb-2">
+      <div
+        class="cursor-pointer"
+        :class="[mainStore.isEncrypt ? 'border-b-2 border-indigo-400': 'opacity-50']"
+        @click="() => mainStore.isEncrypt = true"
+      >
+        Encrypt
+      </div>
+      <div
+        class="cursor-pointer"
+        :class="[!mainStore.isEncrypt ? 'border-b-2 border-indigo-400': 'opacity-50']"
+        @click="() => mainStore.isEncrypt = false"
+      >
+        Decrypt
+      </div>
+    </div>
+    <div class="flex flex-col space-y-2 mb-2">
+      <InputField
+        :content="mainStore.inputString"
+        :placeholder="mainStore.isEncrypt ? 'Plaintext...' :'Ciphertext...'"
+        :accept-all="mainStore.mode === 'vignereext'"
+        @update="handleInputUpdate"
+        @file-changed="handleInputFileChange"
+        @remove-file="handleInputFileRemove"
+      />
+      <InputField
+        :content="mainStore.keyString"
+        placeholder="Key..."
+        :accept-all="mainStore.mode === 'vignereext'"
+        @update="handleKeyUpdate"
+        @file-changed="handleKeyFileChange"
+        @remove-file="handleKeyFileRemove"
+      />
+    </div>
+    <button class="btn w-full py-2" @click="handleButton">
+      {{ mainStore.isEncrypt ? 'Encrypt' :'Decrypt' }}
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useMainStore } from '~/store'
+import { vigenereDecryptRequest, vigenereEncryptRequest } from '~/api/vigenere'
+
+const mainStore = useMainStore()
+
+// HANDLERS
+const handleInputUpdate = (text: string) => {
+  mainStore.inputString = text
+}
+const handleInputFileChange = (text: string) => {
+  mainStore.inputFileString = text
+}
+const handleInputFileRemove = () => {
+  mainStore.inputFileString = ''
+}
+
+const handleKeyUpdate = (text: string) => {
+  mainStore.keyString = text
+}
+const handleKeyFileChange = (text: string) => {
+  mainStore.keyFileString = text
+}
+const handleKeyFileRemove = () => {
+  mainStore.keyFileString = ''
+}
+
+const handleButton = async() => {
+  // get required data
+  const mode = mainStore.mode
+  const isInputFile = mainStore.inputFileString !== ''
+  const input = isInputFile ? mainStore.inputFileString : mainStore.inputString
+  const isKeyFile = mainStore.keyFileString !== ''
+  const key = isKeyFile ? mainStore.keyFileString : mainStore.keyString
+
+  // check mode
+  if (mainStore.isEncrypt) {
+    if (mode === 'vigenerestd') {
+      const result = await vigenereEncryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+  }
+  else {
+    if (mode === 'vigenerestd') {
+      const result = await vigenereDecryptRequest(input, key, false)
+      mainStore.resultString = result.content
+    }
+  }
+}
+
+</script>

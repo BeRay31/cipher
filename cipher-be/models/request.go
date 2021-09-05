@@ -34,6 +34,11 @@ type VigenereExtendedRequest struct {
 	Key     string `json:"key"`
 }
 
+type HillRequest struct {
+	BaseRequest
+	Key string `json:"key"`
+}
+
 func (req *InputRequest) ParseContent() (string, error) {
 	// Parse file
 	if req.Type == "FILE" {

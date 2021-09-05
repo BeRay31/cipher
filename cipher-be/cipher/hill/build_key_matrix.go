@@ -57,7 +57,7 @@ func BuildPlainString(plain string, dim int) ([]string, int) {
 	offset := 0
 	for i := 0; i < len(plain); i += dim {
 		if i+dim > len(plain) {
-			strArr[count] = string(plain[i:len(plain)])
+			strArr[count] = string(plain[i:])
 			offset = i + dim - len(plain) + 1
 		} else {
 			strArr[count] = string(plain[i : i+dim])
