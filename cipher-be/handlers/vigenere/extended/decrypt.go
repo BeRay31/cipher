@@ -15,17 +15,18 @@ func Decrypt(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	content, err := base64.URLEncoding.DecodeString(body.Content)
+
+	content, err := base64.StdEncoding.DecodeString(body.Content)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	decrypted := extended.Decrypt(content, []byte(body.Key))
-	// decryptedBase64 := base64.URLEncoding.EncodeToString(decrypted)
+	decryptedBase64 := base64.StdEncoding.EncodeToString(decrypted)
 
 	payload := &models.VigenereExtendedResponse{
 		BaseResponse: models.BaseResponse{
-			Content: string(decrypted),
+			Content: decryptedBase64,
 		},
 		Key: body.Key,
 	}

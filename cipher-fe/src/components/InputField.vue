@@ -40,6 +40,9 @@
   </template>
 </template>
 <script lang="ts" setup>
+import { useMainStore } from "~/store"
+const store = useMainStore()
+
 // PROPS
 const props = defineProps({
   content: {
@@ -71,6 +74,7 @@ const changeValue = (e: any): void => {
 
 const handleRemoveFile = () => {
   emit('removeFile')
+  store.fileInputProperties = null
   fileText.value = ''
 }
 
@@ -92,11 +96,13 @@ const handleFileChange = (e: any) => {
   else {
     const reader = new FileReader()
     reader.addEventListener('load', () => {
-      const result = reader.result as string
-      fileText.value = '<file read>'
+      let result = reader.result as string
+      console.log("🚀 ~ file: InputField.vue ~ line 100 ~ reader.addEventListener ~ result", result)
       emit('fileChanged', result)
     })
-    reader.readAsDataURL(e.target.files[0])
+    store.fileInputProperties = e.target.files[0]
+    fileText.value = e.target.files[0]?.name
+    reader.readAsText(e.target.files[0])
   }
 }
 </script>

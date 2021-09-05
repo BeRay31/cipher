@@ -96,7 +96,9 @@ const handleButton = async() => {
       mainStore.resultString = result.content
     }
     if (mode === 'vigenereext') {
-      const result = await vigenereExtendedEncryptRequest(input, key)
+      const base64 = btoa(input)
+      console.log("🚀 ~ file: ModeSelection.vue ~ line 131 ~ handleButton ~ base64", base64, atob(base64))
+      const result = await vigenereExtendedEncryptRequest(base64, key)
       mainStore.resultString = result.content
     }
     if (mode === 'playfair') {
@@ -127,7 +129,9 @@ const handleButton = async() => {
       mainStore.resultString = result.content
     }
     if (mode === 'vigenereext') {
-      const result = await vigenereExtendedDecryptRequest(input, key)
+      const base64 = btoa(input)
+      console.log("🚀 ~ file: ModeSelection.vue ~ line 131 ~ handleButton ~ base64", base64, atob(base64))
+      const result = await vigenereExtendedDecryptRequest(base64, key)
       mainStore.resultString = result.content
     }
     if (mode === 'playfair') {

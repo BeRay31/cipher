@@ -29,6 +29,7 @@
     </div>
     <!-- TEXT RESULT -->
     <pre v-if="mainStore.mode !== 'vigenereext'" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
+    <pre v-else-if="mainStore.mode === 'vigenereext' && mainStore.fileInputProperties" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ `[${mainStore.isEncrypt ? 'Encrypted' : 'Decrypted'}]${mainStore.fileInputProperties?.name}` }}</pre>
   </div>
 </template>
 
@@ -52,42 +53,21 @@ const downloadFile = (text: string, name: string) => {
   element.click()
   element.remove()
 }
-const dataURItoBlob = (dataURI: string) => {
-  const buffer = Buffer.from(dataURI, 'base64')
-  const ab = Uint8Array.from(buffer).buffer
-  // write the ArrayBuffer to a blob, and you're done
-  const blob = new Blob([ab])
-  return blob
-}
-
-const toBinary = (string: string) => {
-  const codeUnits = new Uint16Array(string.length)
-  for (let i = 0; i < codeUnits.length; i++)
-    codeUnits[i] = string.charCodeAt(i)
-
-  return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)))
-}
-
-const fromBinary = (encoded: string) => {
-  const binary = atob(encoded)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < bytes.length; i++)
-    bytes[i] = binary.charCodeAt(i)
-
-  return String.fromCharCode(...new Uint16Array(bytes.buffer))
-}
 
 const handleDownload = (): void => {
-  if (mainStore.mode !== 'vigenereext') { downloadFile(mainStore.resultString, new Date().getTime().toString()) }
+  if (mainStore.mode !== 'vigenereext') {
+    downloadFile(mainStore.resultString, new Date().getTime().toString())
+  }
   else {
-    console.log(mainStore.resultString)
-    const blob = dataURItoBlob(mainStore.resultString)
+    // console.log(mainStore.resultString)
+    // console.log(atob(mainStore.resultString))
+    // console.log(btoa(atob(mainStore.resultString)))
+    const blob = new Blob([atob(mainStore.resultString)], { type: mainStore.fileInputProperties?.type })
     const link = document.createElement('a')
-    const fileName = new Date().getTime().toString()
+    const fileName = `[${new Date().getTime().toString()}]${mainStore.fileInputProperties?.name}`
     link.href = window.URL.createObjectURL(blob)
     link.download = fileName
     link.click()
-    // downloadFile(bytes.buffer, new Date().getTime().toString())
   }
 }
 

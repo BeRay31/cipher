@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { cipherTypes } from './constants'
-
+import { Ref } from '@vue/reactivity'
 export const useMainStore = defineStore('main', () => {
   const modeIndex = ref(0)
   const mode = ref(cipherTypes[0])
@@ -8,6 +8,7 @@ export const useMainStore = defineStore('main', () => {
   const inputString = ref('')
   const keyString = ref('')
   const inputFileString = ref('')
+  const fileInputProperties: Ref<File | null> = ref(null)
   const keyFileString = ref('')
   const resultString = ref('')
 
@@ -17,6 +18,7 @@ export const useMainStore = defineStore('main', () => {
     isEncrypt,
     inputString,
     inputFileString,
+    fileInputProperties,
     keyString,
     keyFileString,
     resultString,
