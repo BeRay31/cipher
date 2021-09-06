@@ -29,7 +29,7 @@
       </div>
     </div>
     <!-- TEXT RESULT -->
-    <pre v-else-if="mainStore.mode !== 'vigenereext'" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
+    <pre v-if="mainStore.mode !== 'vigenereext'" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
     <pre v-else-if="!!mainStore.resultFile" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ `[${mainStore.isEncrypt ? 'Encrypted' : 'Decrypted'}]${mainStore.fileInputProperties?.name}` }}</pre>
   </div>
 </template>

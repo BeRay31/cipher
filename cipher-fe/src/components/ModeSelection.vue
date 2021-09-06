@@ -39,6 +39,9 @@
     <div v-if="mainStore.mode === 'affine'" class="opacity-20 mb-2">
       Note: For affine ecnryption, key should be in format of m,b (key, offset)
     </div>
+    <div v-if="mainStore.mode === 'hill'" class="opacity-20 mb-2">
+      Note: For hill ecnryption, key should be have a quadratic length ex "bcef"
+    </div>
     <button class="btn w-full py-2" @click="handleButton">
       {{ mainStore.isEncrypt ? 'Encrypt' :'Decrypt' }}
     </button>
@@ -87,73 +90,76 @@ const handleButton = async() => {
   const input = isInputFile ? mainStore.inputFileString : mainStore.inputString
   const isKeyFile = mainStore.keyFileString !== ''
   const key = isKeyFile ? mainStore.keyFileString : mainStore.keyString
-
-  // check mode
-  if (mainStore.isEncrypt) {
-    if (mode === 'vigenerestd') {
-      const result = await vigenereEncryptRequest(input, key, false, 'standard')
-      mainStore.resultString = result.content
+  try {
+    // check mode
+    if (mainStore.isEncrypt) {
+      if (mode === 'vigenerestd') {
+        const result = await vigenereEncryptRequest(input, key, false, 'standard')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenerefull') {
+        const result = await vigenereEncryptRequest(input, key, false, 'full')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenereauto') {
+        const result = await vigenereEncryptRequest(input, key, false, 'auto')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenereext') {
+        const result = await vigenereExtendedEncryptRequest(mainStore.fileInputProperties as File, key)
+        const unsigned8byteArray = new Uint8Array(result)
+        const file = new Blob([unsigned8byteArray])
+        mainStore.resultFile = file as File
+      }
+      if (mode === 'playfair') {
+        const result = await playfairEncryptRequest(input, key, false)
+        mainStore.resultString = result.content
+      }
+      if (mode === 'hill') {
+        const result = await hillEncryptRequest(input, key, false)
+        mainStore.resultString = result.content
+      }
+      if (mode === 'affine') {
+        const [m, b] = key.split(',')
+        const result = await affineEncryptRequest(input, parseInt(m), parseInt(b), false)
+        mainStore.resultString = result.content
+      }
     }
-    if (mode === 'vigenerefull') {
-      const result = await vigenereEncryptRequest(input, key, false, 'full')
-      mainStore.resultString = result.content
+    else {
+      if (mode === 'vigenerestd') {
+        const result = await vigenereDecryptRequest(input, key, false, 'standard')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenerefull') {
+        const result = await vigenereDecryptRequest(input, key, false, 'full')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenereauto') {
+        const result = await vigenereDecryptRequest(input, key, false, 'auto')
+        mainStore.resultString = result.content
+      }
+      if (mode === 'vigenereext') {
+        const result = await vigenereExtendedDecryptRequest(mainStore.fileInputProperties as File, key)
+        const unsigned8byteArray = new Uint8Array(result)
+        const file = new Blob([unsigned8byteArray])
+        mainStore.resultFile = file as File
+      }
+      if (mode === 'playfair') {
+        const result = await playfairDecryptRequest(input, key, false)
+        mainStore.resultString = result.content
+      }
+      if (mode === 'hill') {
+        const result = await hillDecryptRequest(input, key, false)
+        mainStore.resultString = result.content
+      }
+      if (mode === 'affine') {
+        const [m, b] = key.split(',')
+        const result = await affineDecryptRequest(input, parseInt(m), parseInt(b), false)
+        mainStore.resultString = result.content
+      }
     }
-    if (mode === 'vigenereauto') {
-      const result = await vigenereEncryptRequest(input, key, false, 'auto')
-      mainStore.resultString = result.content
-    }
-    if (mode === 'vigenereext') {
-      const result = await vigenereExtendedEncryptRequest(mainStore.fileInputProperties as File, key)
-      const unsigned8byteArray = new Uint8Array(result)
-      const file = new Blob([unsigned8byteArray])
-      mainStore.resultFile = file as File
-    }
-    if (mode === 'playfair') {
-      const result = await playfairEncryptRequest(input, key, false)
-      mainStore.resultString = result.content
-    }
-    if (mode === 'hill') {
-      const result = await hillEncryptRequest(input, key, false)
-      mainStore.resultString = result.content
-    }
-    if (mode === 'affine') {
-      const [m, b] = key.split(',')
-      const result = await affineEncryptRequest(input, parseInt(m), parseInt(b), false)
-      mainStore.resultString = result.content
-    }
-  }
-  else {
-    if (mode === 'vigenerestd') {
-      const result = await vigenereDecryptRequest(input, key, false, 'standard')
-      mainStore.resultString = result.content
-    }
-    if (mode === 'vigenerefull') {
-      const result = await vigenereDecryptRequest(input, key, false, 'full')
-      mainStore.resultString = result.content
-    }
-    if (mode === 'vigenereauto') {
-      const result = await vigenereDecryptRequest(input, key, false, 'auto')
-      mainStore.resultString = result.content
-    }
-    if (mode === 'vigenereext') {
-      const result = await vigenereExtendedDecryptRequest(mainStore.fileInputProperties as File, key)
-      const unsigned8byteArray = new Uint8Array(result)
-      const file = new Blob([unsigned8byteArray])
-      mainStore.resultFile = file as File
-    }
-    if (mode === 'playfair') {
-      const result = await playfairDecryptRequest(input, key, false)
-      mainStore.resultString = result.content
-    }
-    if (mode === 'hill') {
-      const result = await hillDecryptRequest(input, key, false)
-      mainStore.resultString = result.content
-    }
-    if (mode === 'affine') {
-      const [m, b] = key.split(',')
-      const result = await affineDecryptRequest(input, parseInt(m), parseInt(b), false)
-      mainStore.resultString = result.content
-    }
+  } catch(e) {
+    mainStore.resultString = e.toString()
   }
 }
 
