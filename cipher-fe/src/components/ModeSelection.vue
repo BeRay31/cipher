@@ -98,7 +98,7 @@ const handleButton = async() => {
     if (mode === 'vigenereext') {
       const result = await vigenereExtendedEncryptRequest(mainStore.fileInputProperties as File, key)
       const unsigned8byteArray = new Uint8Array(result)
-      const file = new Blob([unsigned8byteArray], { type: mainStore.fileInputProperties?.type })
+      const file = new Blob([unsigned8byteArray])
       mainStore.resultFile = file as File
     }
     if (mode === 'playfair') {
@@ -131,7 +131,7 @@ const handleButton = async() => {
     if (mode === 'vigenereext') {
       const result = await vigenereExtendedDecryptRequest(mainStore.fileInputProperties as File, key)
       const unsigned8byteArray = new Uint8Array(result)
-      const file = new Blob([unsigned8byteArray], { type: mainStore.fileInputProperties?.type })
+      const file = new Blob([unsigned8byteArray])
       mainStore.resultFile = file as File
     }
     if (mode === 'playfair') {
