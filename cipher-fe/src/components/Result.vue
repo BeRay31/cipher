@@ -14,6 +14,7 @@
         </button>
       </div>
       <div
+        v-if="mainStore.mode !== 'vigenereext' && !mainStore.error"
         class="flex space-x-2"
       >
         <div
@@ -29,7 +30,7 @@
     </div>
     <!-- TEXT RESULT -->
     <pre v-if="mainStore.mode !== 'vigenereext'" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ display(mainStore.resultString) }}</pre>
-    <pre v-else-if="mainStore.mode === 'vigenereext' && mainStore.fileInputProperties" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ `[${mainStore.isEncrypt ? 'Encrypted' : 'Decrypted'}]${mainStore.fileInputProperties?.name}` }}</pre>
+    <pre v-else-if="!!mainStore.resultFile" class="w-full overflow-x-auto p-2 rounded-lg bg-gray-600">{{ `[${mainStore.isEncrypt ? 'Encrypted' : 'Decrypted'}]${mainStore.fileInputProperties?.name}` }}</pre>
   </div>
 </template>
 
@@ -59,13 +60,9 @@ const handleDownload = (): void => {
     downloadFile(mainStore.resultString, new Date().getTime().toString())
   }
   else {
-    // console.log(mainStore.resultString)
-    // console.log(atob(mainStore.resultString))
-    // console.log(btoa(atob(mainStore.resultString)))
-    const blob = new Blob([atob(mainStore.resultString)], { type: mainStore.fileInputProperties?.type })
     const link = document.createElement('a')
     const fileName = `[${new Date().getTime().toString()}]${mainStore.fileInputProperties?.name}`
-    link.href = window.URL.createObjectURL(blob)
+    link.href = window.URL.createObjectURL(mainStore.resultFile)
     link.download = fileName
     link.click()
   }

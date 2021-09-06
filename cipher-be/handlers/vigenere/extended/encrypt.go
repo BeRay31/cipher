@@ -1,35 +1,32 @@
 package extended
 
 import (
-	"encoding/base64"
-	"fmt"
+	"bytes"
+	"io"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mkamadeus/cipher/cipher/vigenere/extended"
-	"github.com/mkamadeus/cipher/models"
 )
 
 func Encrypt(c echo.Context) error {
-	body := new(models.VigenereExtendedRequest)
-	err := c.Bind(body)
+	content, err := c.FormFile("content")
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	key := c.FormValue("key")
 
-	content, err := base64.StdEncoding.DecodeString(body.Content)
+	contentSrc, err := content.Open()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
+	defer contentSrc.Close()
 
-	encrypted := extended.Encrypt(content, []byte(body.Key))
-	encryptedBase64 := base64.StdEncoding.EncodeToString(encrypted)
-	fmt.Println("rawContent", body.Content, " ", "content:", string(content), " ", "encrypted:", string(encrypted), " ", "base64Enc:", encryptedBase64)
-	payload := &models.VigenereExtendedResponse{
-		BaseResponse: models.BaseResponse{
-			Content: encryptedBase64,
-		},
-		Key: body.Key,
+	contentBuffer := bytes.NewBuffer(nil)
+	if _, err := io.Copy(contentBuffer, contentSrc); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
 	}
-	return c.JSON(http.StatusOK, payload)
+
+	encrypted := extended.Encrypt(contentBuffer.Bytes(), []byte(key))
+	return c.Blob(http.StatusOK, "application/octet-stream", encrypted)
 }

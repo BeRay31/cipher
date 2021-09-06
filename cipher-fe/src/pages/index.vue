@@ -8,7 +8,7 @@
         <mode-selection />
       </div>
     </div>
-    <div v-if="mainStore.resultString !== ''" class="w-full">
+    <div v-if="mainStore.resultString !== '' || !!mainStore.resultFile" class="w-full">
       <result />
     </div>
   </div>
