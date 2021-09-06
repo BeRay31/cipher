@@ -8,6 +8,7 @@
       @click="() => {
         store.modeIndex = i
         store.mode = cipherTypes[i]
+        store.resetIO()
       }"
     >
       <div class="relative inline-flex items-center">

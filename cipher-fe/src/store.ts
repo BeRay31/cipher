@@ -12,6 +12,15 @@ export const useMainStore = defineStore('main', () => {
   const resultFile: Ref<File | null> = ref(null)
   const keyFileString = ref('')
   const resultString = ref('')
+  const resetIO = () => {
+    resultFile.value = null
+    resultString.value = ''
+    keyFileString.value = ''
+    keyString.value = ''
+    fileInputProperties.value = null
+    inputString.value = ''
+    inputFileString.value = ''
+  }
 
   return {
     mode,
@@ -24,6 +33,7 @@ export const useMainStore = defineStore('main', () => {
     keyString,
     keyFileString,
     resultString,
+    resetIO
   }
 })
 // export const useMainStore = defineStore('main', {

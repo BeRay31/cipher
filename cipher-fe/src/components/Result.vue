@@ -14,6 +14,7 @@
         </button>
       </div>
       <div
+        v-if="mainStore.mode !== 'vigenereext'"
         class="flex space-x-2"
       >
         <div

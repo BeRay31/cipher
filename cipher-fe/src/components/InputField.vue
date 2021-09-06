@@ -57,11 +57,30 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  type: {
+    type: String,
+    default: "content"
+  }
 })
+
 
 // REFS
 const inputText = ref(props.content)
 const fileText = ref('')
+
+
+watchEffect(() => {
+  inputText.value = props.content
+  if (props.type === 'content') {
+    if (props.acceptAll) {
+      fileText.value = store.fileInputProperties?.name as string
+    } else {
+      fileText.value = store.inputFileString
+    }
+  } else {
+    fileText.value = store.keyFileString
+  }
+})
 
 // EMITS
 const emit = defineEmits(['fileChanged', 'update', 'removeFile'])
@@ -75,7 +94,6 @@ const changeValue = (e: any): void => {
 const handleRemoveFile = () => {
   emit('removeFile')
   store.fileInputProperties = null
-  fileText.value = ''
 }
 
 const handleClickInputFile = () => {
@@ -88,7 +106,6 @@ const handleFileChange = (e: any) => {
     const reader = new FileReader()
     reader.addEventListener('load', (event) => {
       const text = reader.result as string
-      fileText.value = text
       emit('fileChanged', text)
     })
     reader.readAsText(e.target.files[0])
@@ -100,7 +117,6 @@ const handleFileChange = (e: any) => {
       emit('fileChanged', result)
     })
     store.fileInputProperties = e.target.files[0]
-    fileText.value = e.target.files[0]?.name
     reader.readAsText(e.target.files[0])
   }
 }

@@ -4,14 +4,14 @@
       <div
         class="cursor-pointer"
         :class="[mainStore.isEncrypt ? 'border-b-2 border-indigo-400': 'opacity-50']"
-        @click="() => mainStore.isEncrypt = true"
+        @click="() => setIsEncrypt(true)"
       >
         Encrypt
       </div>
       <div
         class="cursor-pointer"
         :class="[!mainStore.isEncrypt ? 'border-b-2 border-indigo-400': 'opacity-50']"
-        @click="() => mainStore.isEncrypt = false"
+        @click="() => setIsEncrypt(false)"
       >
         Decrypt
       </div>
@@ -21,6 +21,7 @@
         :content="mainStore.inputString"
         :placeholder="mainStore.isEncrypt ? 'Plaintext...' :'Ciphertext...'"
         :accept-all="mainStore.mode === 'vigenereext'"
+        type="content"
         @update="handleInputUpdate"
         @file-changed="handleInputFileChange"
         @remove-file="handleInputFileRemove"
@@ -29,6 +30,7 @@
         :content="mainStore.keyString"
         placeholder="Key..."
         :accept-all="false"
+        type="key"
         @update="handleKeyUpdate"
         @file-changed="handleKeyFileChange"
         @remove-file="handleKeyFileRemove"
@@ -51,6 +53,11 @@ import { playfairDecryptRequest, playfairEncryptRequest } from '~/api/playfair'
 import { hillDecryptRequest, hillEncryptRequest } from '~/api/hill'
 
 const mainStore = useMainStore()
+
+const setIsEncrypt = (status: boolean) => {
+  mainStore.isEncrypt = status
+  mainStore.resetIO()
+}
 
 // HANDLERS
 const handleInputUpdate = (text: string) => {
