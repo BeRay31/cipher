@@ -7,7 +7,7 @@ import (
 )
 
 func TestDecrypt(t *testing.T) {
-	cipher := "lvvqhzngfhrvl"
+	cipher := "LVVQHZNGFHRVL"
 	key := "sony"
 	expected := "THISPLAINTEXT"
 
