@@ -42,7 +42,7 @@ func TestEncryptIgnoreSymbol(t *testing.T) {
 func TestEncryptIgnoreKeyWhitespace(t *testing.T) {
 	plain := "dCode Vigenere !#!#!#!# automatically"
 	key := "K   E   Y     "
-	expected := "nGmniTskcxipoesdskkxgmejvc"
+	expected := "NGMNITSKCXIPOESDSKKXGMEJVC"
 
 	encrypted := standard.Encrypt(plain, key)
 	if encrypted != expected {

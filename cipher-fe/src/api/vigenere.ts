@@ -22,7 +22,7 @@ export const vigenereDecryptRequest = async(plain: string, key: string, isFile: 
     },
     key: key.toUpperCase(),
   }
-  const response = await axios.post(`http://localhost:1337/vigenere/${style || 'standard'}/encrypt`, requestBody)
+  const response = await axios.post(`http://localhost:1337/vigenere/${style || 'standard'}/decrypt`, requestBody)
   const result = response.data
 
   return result
