@@ -9,6 +9,7 @@ export const useMainStore = defineStore('main', () => {
   const keyString = ref('')
   const inputFileString = ref('')
   const fileInputProperties: Ref<File | null> = ref(null)
+  const resultFile: Ref<File | null> = ref(null)
   const keyFileString = ref('')
   const resultString = ref('')
 
@@ -19,6 +20,7 @@ export const useMainStore = defineStore('main', () => {
     inputString,
     inputFileString,
     fileInputProperties,
+    resultFile,
     keyString,
     keyFileString,
     resultString,

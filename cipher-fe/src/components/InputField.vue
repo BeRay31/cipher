@@ -97,7 +97,6 @@ const handleFileChange = (e: any) => {
     const reader = new FileReader()
     reader.addEventListener('load', () => {
       let result = reader.result as string
-      console.log("🚀 ~ file: InputField.vue ~ line 100 ~ reader.addEventListener ~ result", result)
       emit('fileChanged', result)
     })
     store.fileInputProperties = e.target.files[0]

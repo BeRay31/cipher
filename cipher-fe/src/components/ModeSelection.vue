@@ -96,10 +96,10 @@ const handleButton = async() => {
       mainStore.resultString = result.content
     }
     if (mode === 'vigenereext') {
-      const base64 = btoa(input)
-      console.log("🚀 ~ file: ModeSelection.vue ~ line 131 ~ handleButton ~ base64", base64, atob(base64))
-      const result = await vigenereExtendedEncryptRequest(base64, key)
-      mainStore.resultString = result.content
+      const result = await vigenereExtendedEncryptRequest(mainStore.fileInputProperties as File, key)
+      const unsigned8byteArray = new Uint8Array(result)
+      const file = new Blob([unsigned8byteArray], { type: mainStore.fileInputProperties?.type })
+      mainStore.resultFile = file as File
     }
     if (mode === 'playfair') {
       const result = await playfairEncryptRequest(input, key, false)
@@ -129,10 +129,10 @@ const handleButton = async() => {
       mainStore.resultString = result.content
     }
     if (mode === 'vigenereext') {
-      const base64 = btoa(input)
-      console.log("🚀 ~ file: ModeSelection.vue ~ line 131 ~ handleButton ~ base64", base64, atob(base64))
-      const result = await vigenereExtendedDecryptRequest(base64, key)
-      mainStore.resultString = result.content
+      const result = await vigenereExtendedDecryptRequest(mainStore.fileInputProperties as File, key)
+      const unsigned8byteArray = new Uint8Array(result)
+      const file = new Blob([unsigned8byteArray], { type: mainStore.fileInputProperties?.type })
+      mainStore.resultFile = file as File
     }
     if (mode === 'playfair') {
       const result = await playfairDecryptRequest(input, key, false)
